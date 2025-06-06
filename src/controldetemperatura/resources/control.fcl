@@ -1,0 +1,31 @@
+FUNCTION_BLOCK temperatura
+
+VAR_INPUT
+    temperatura : REAL;
+END_VAR
+
+VAR_OUTPUT
+    ventilador : REAL;
+END_VAR
+
+FUZZIFY temperatura
+    TERM frio := (0, 1) (15, 0);
+    TERM templado := (10, 0) (20, 1) (30, 0);
+    TERM caliente := (25, 0) (40, 1);
+END_FUZZIFY
+
+DEFUZZIFY ventilador
+    TERM bajo := (0,1) (30,0);
+    TERM medio := (20,0) (50,1) (80,0);
+    TERM alto := (60,0) (100,1);
+    METHOD : COG;
+    DEFAULT := 0;
+END_DEFUZZIFY
+
+RULEBLOCK reglas
+    RULE 1 : IF temperatura IS frio THEN ventilador IS bajo;
+    RULE 2 : IF temperatura IS templado THEN ventilador IS medio;
+    RULE 3 : IF temperatura IS caliente THEN ventilador IS alto;
+END_RULEBLOCK
+
+END_FUNCTION_BLOCK
